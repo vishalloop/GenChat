@@ -5,4 +5,6 @@ export interface IConfig {
     REDIS_HOST : string;
     REDIS_PORT : string;
     REDIS_PASSWORD : string;
+    GOOGLE_CLIENT_ID : string;
+    GOOGLE_CLIENT_SECRET : string;
 }

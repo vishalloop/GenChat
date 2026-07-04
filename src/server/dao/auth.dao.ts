@@ -2,7 +2,7 @@ import { IUser, UserDocument } from "@/types/user.types";
 import userModel from "../models/user.model";
 
 export function createUser (data : IUser) : Promise<UserDocument> {
-    return userModel.create({data});
+    return userModel.create(data);
 }
 
 export function findUserById (id : string) : Promise <UserDocument | null> {

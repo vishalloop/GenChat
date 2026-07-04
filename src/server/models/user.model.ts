@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema<UserDocument>({
     role : {
         type : String,
         required : [true , "Role is required for registration."],
-        enum : ["local" , "google" , "github"],
+        enum : ["local" , "google"],
         default : "local"
     },
     googleId : {

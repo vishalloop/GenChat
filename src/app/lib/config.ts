@@ -18,4 +18,6 @@ export const config : IConfig = {
     REDIS_HOST : required("REDIS_HOST"),
     REDIS_PORT : required("REDIS_PORT"),
     REDIS_PASSWORD : required("REDIS_PASSWORD"),
+    GOOGLE_CLIENT_ID : required("GOOGLE_CLIENT_ID"),
+    GOOGLE_CLIENT_SECRET : required("GOOGLE_CLIENT_SECRET"),
 }

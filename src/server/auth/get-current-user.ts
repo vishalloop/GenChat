@@ -1,5 +1,4 @@
 import { connectToDB } from "@/app/lib/db";
-import erroResponse from "../utils/api-response";
 import { getAuthCookie } from "@/app/lib/cookie";
 import { ApiError } from "../utils/api-error";
 import { getBlacklistToken } from "../services/token-blacklist.service";
@@ -24,7 +23,7 @@ export async function getCurrentUser () : Promise<UserDocument> {
         let decoded;
         try {
             decoded = verifyToken(token as unknown as string);
-        } catch (error) {
+        } catch {
             throw new ApiError("Unauthorized Access: Invalid or expired token.", 401);
         };
 
