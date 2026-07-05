@@ -1,53 +1,50 @@
-// src/app/api/message/create-message/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { handleCreateMessage } from "@/server/services/message.service";
+import { getCurrentUser } from "@/server/auth/get-current-user";
 import errorResponse from "@/server/utils/api-response";
-import { messageSchema } from "@/server/validators/message.validator";
 import { ApiError } from "@/server/utils/api-error";
 import { ApiResponse } from "@/types/api.types";
 import { messsageResponse } from "@/types/message.types";
+import { connectToDB } from "@/lib/db";
+import z from "zod";
 
-export async function POST(request: NextRequest) {
+const objectIdRegex = /^[0-9a-fA-F]{24}$/;
+const bodySchema = z.object({
+  chatId: z.string().regex(objectIdRegex).optional(),
+  content: z.string().min(1, "Message cannot be empty"),
+});
+
+export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
+    await connectToDB();
+    const user = await getCurrentUser();
+
     const body = await request.json();
+    const result = bodySchema.safeParse(body);
 
-    const validationResult = messageSchema.safeParse(body);
-
-    if(!validationResult.success) {
-        throw new ApiError(validationResult.error.issues[0].message , 400);
+    if (!result.success) {
+      throw new ApiError(result.error.issues[0].message, 400);
     }
 
-    // ---- validation -------------------------------------------------
-    const { data } = validationResult;
-    if (!data.content || typeof data.content !== "string") {
-      return NextResponse.json(
-        { error: "Missing or invalid `content` field." },
-        { status: 400 }
-      );
-    }
-    if (!data.userId || typeof data.userId !== "string") {
-      // In a real app you would pull the user from a session / JWT
-      return NextResponse.json(
-        { error: "Missing `userId` – authentication required." },
-        { status: 401 }
-      );
-    }
+    const { chatId, content } = result.data;
 
-    // ---- core logic ------------------------------------------------
-    const result = await handleCreateMessage(data);
+    const data = await handleCreateMessage({
+      chatId,
+      content,
+      userId: user._id.toString(),
+    });
 
-    // ---- success response -------------------------------------------
     return NextResponse.json<ApiResponse<messsageResponse>>({
       success: true,
-      message : "Message created successfully.",
-      data : {
-          chatId: result.chatId,
-          answer: result.answer,
-          userMessageId: result.userMessageId,
-          assistantMessageId: result.assistantMessageId,
-      }
+      message: "Message created successfully.",
+      data: {
+        chatId: data.chatId,
+        answer: data.answer,
+        userMessageId: data.userMessageId,
+        assistantMessageId: data.assistantMessageId,
+      },
     });
   } catch (err) {
-    errorResponse(err);
+    return errorResponse(err);
   }
 }

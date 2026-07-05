@@ -1,43 +1,33 @@
+import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser } from "@/server/auth/get-current-user";
-import { deleteChat } from "@/server/dao/chat.dao";
+import { deleteChat, getParticularChat } from "@/server/dao/chat.dao";
 import { deleteMessages } from "@/server/dao/message.dao";
 import { ApiError } from "@/server/utils/api-error";
 import errorResponse from "@/server/utils/api-response";
-import { deleteChatSchema } from "@/server/validators/chat.validator";
-import { ApiResponse } from "@/types/api.types";
-import { NextRequest, NextResponse } from "next/server";
+import { connectToDB } from "@/lib/db";
 
-export async function DELETE(req : NextRequest) : Promise<NextResponse> {
-    try {
+export async function DELETE(request: NextRequest): Promise<NextResponse> {
+  try {
+    await connectToDB();
+    const user = await getCurrentUser();
 
-        const body = req.json();
+    const chatId = request.nextUrl.searchParams.get("chatId");
+    if (!chatId) throw new ApiError("chatId is required", 400);
 
-        const result = deleteChatSchema.safeParse(body);
-        
-        if(!result.success) {
-            throw new ApiError(result.error.issues[0].message , 400);
-        };
-
-        await getCurrentUser();
-
-        const { data } = result;
-
-        const deletedChat = await deleteChat(data);
-
-        if(!deletedChat) {
-            throw new ApiError("Chat Id was not found.", 404);
-        }
-
-        await deleteMessages(data);
-
-        return NextResponse.json<ApiResponse>({
-            success : true,
-            message : "Chats deleted successfully."
-        },{
-            status : 200
-        })
-
-    } catch (error) {
-        return errorResponse(error);
+    const chat = await getParticularChat(chatId);
+    if (!chat) throw new ApiError("Chat not found", 404);
+    if (chat.user.toString() !== user._id.toString()) {
+      throw new ApiError("Forbidden", 403);
     }
+
+    await deleteMessages(chatId);
+    await deleteChat(chatId);
+
+    return NextResponse.json({
+      success: true,
+      message: "Chat deleted successfully.",
+    });
+  } catch (err) {
+    return errorResponse(err);
+  }
 }
