@@ -9,6 +9,8 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.101.2",
+    "axios": "^1.18.1",
     "bcryptjs": "^3.0.3",
     "ioredis": "^5.11.1",
     "jsonwebtoken": "^9.0.3",
@@ -18,7 +20,8 @@
     "passport-google-oauth20": "^2.0.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "zod": "^4.4.3"
+    "zod": "^4.4.3",
+    "zustand": "^5.0.14"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

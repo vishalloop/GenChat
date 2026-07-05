@@ -1,4 +1,4 @@
-import redis from "@/app/lib/redis";
+import redis from "@/lib/redis";
 
 export async function setBlacklistToken(token:string) : Promise<void> {
     await redis.set(token, "Blacklisted" , "EX" , 60 * 60 * 24 * 7);

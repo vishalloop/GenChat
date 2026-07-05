@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectToDB } from "@/app/lib/db";
-import { generateToken } from "@/app/lib/jwt";
-import { setAuthCookie } from "@/app/lib/cookie";
+import { connectToDB } from "@/lib/db";
+import { generateToken } from "@/lib/jwt";
+import { setAuthCookie } from "@/lib/cookie";
 import { createUser, findUserByEmail, findUserByGoogleId } from "@/server/dao/auth.dao";
-import { config } from "@/app/lib/config";
+import { config } from "@/lib/config";
 import erroResponse from "@/server/utils/api-response";
 import crypto from "crypto";
 
@@ -81,7 +81,7 @@ export async function GET(req: NextRequest) {
     await setAuthCookie(token);
 
     // 5. Redirect user to dashboard/home page
-    return NextResponse.redirect(new URL("/", req.url));
+    return NextResponse.redirect(new URL("/dashboard", req.url));
   } catch (error) {
     return erroResponse(error);
   }

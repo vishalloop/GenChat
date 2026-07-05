@@ -1,6 +1,6 @@
-import { setAuthCookie } from "@/app/lib/cookie";
-import { connectToDB } from "@/app/lib/db";
-import { generateToken } from "@/app/lib/jwt";
+import { setAuthCookie } from "@/lib/cookie";
+import { connectToDB } from "@/lib/db";
+import { generateToken } from "@/lib/jwt";
 import { AuthUser } from "@/features/auth/types/auth.types";
 import { findUserByEmail } from "@/server/dao/auth.dao";
 import { ApiError } from "@/server/utils/api-error";

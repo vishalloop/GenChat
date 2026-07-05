@@ -1,40 +1,40 @@
-import { connectToDB } from "@/app/lib/db";
-import { getAuthCookie } from "@/app/lib/cookie";
+import { connectToDB } from "@/lib/db";
+import { getAuthCookie, clearAuthCookie } from "@/lib/cookie"; // Add clearAuthCookie
 import { ApiError } from "../utils/api-error";
 import { getBlacklistToken } from "../services/token-blacklist.service";
-import { verifyToken } from "@/app/lib/jwt";
+import { verifyToken } from "@/lib/jwt";
 import { findUserById } from "../dao/auth.dao";
 import { UserDocument } from "@/types/user.types";
 
 export async function getCurrentUser () : Promise<UserDocument> {
+    const token = await getAuthCookie(); // Make sure this is awaited
 
-        const token = getAuthCookie();
+    if(!token) {
+        throw new ApiError("Unauthorized access.", 401);
+    };
 
-        if(!token) {
-            throw new ApiError("Unauthorized access.", 401);
-        };
+    const isTokenBlackListed = await getBlacklistToken(token);
 
-        const isTokenBlackListed = await getBlacklistToken(token as unknown as string);
+    if(isTokenBlackListed) {
+        await clearAuthCookie(); // Clear invalid cookie from browser
+        throw new ApiError("Unauthorized access.", 401);
+    };
 
-        if(isTokenBlackListed) {
-            throw new ApiError("Unauthorized access.", 401);
-        };
+    let decoded;
+    try {
+        decoded = verifyToken(token);
+    } catch {
+        await clearAuthCookie(); // Clear invalid cookie from browser
+        throw new ApiError("Unauthorized Access: Invalid or expired token.", 401);
+    };
 
-        let decoded;
-        try {
-            decoded = verifyToken(token as unknown as string);
-        } catch {
-            throw new ApiError("Unauthorized Access: Invalid or expired token.", 401);
-        };
+    await connectToDB();
+    const user = await findUserById(decoded.id);
 
-        await connectToDB();
+    if(!user) {
+        await clearAuthCookie(); // Clear invalid cookie from browser
+        throw new ApiError("Unauthorized Access.", 401);
+    }
 
-        const user = await findUserById(decoded.id);
-
-        if(!user) {
-            throw new ApiError("Unauthorized Access.", 401);
-        }
-
-        return user;
-
+    return user;
 }

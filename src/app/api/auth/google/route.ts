@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { config } from "@/app/lib/config";
+import { config } from "@/lib/config";
 
 export async function GET() {
   const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
