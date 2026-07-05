@@ -4,7 +4,7 @@ import { generateToken } from "@/lib/jwt";
 import { AuthUser } from "@/features/auth/types/auth.types";
 import { createUser, findUserByEmail } from "@/server/dao/auth.dao";
 import { ApiError } from "@/server/utils/api-error";
-import erroResponse from "@/server/utils/api-response";
+import errorResponse from "@/server/utils/api-response";
 import { registerSchema } from "@/server/validators/auth.validator";
 import { ApiResponse } from "@/types/api.types";
 import { NextRequest, NextResponse } from "next/server";
@@ -49,6 +49,6 @@ export async function POST(req : NextRequest) : Promise<NextResponse> {
         })
 
     } catch (error) {
-        return erroResponse(error);
+        return errorResponse(error);
     }
 }

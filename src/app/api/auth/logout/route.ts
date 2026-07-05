@@ -1,6 +1,6 @@
 import { clearAuthCookie, getAuthCookie } from "@/lib/cookie";
 import { setBlacklistToken } from "@/server/services/token-blacklist.service";
-import erroResponse from "@/server/utils/api-response";
+import errorResponse from "@/server/utils/api-response";
 import { ApiResponse } from "@/types/api.types";
 import { NextResponse } from "next/server";
 
@@ -26,6 +26,6 @@ export async function POST(): Promise<NextResponse> {
     } catch (error) {
         // Even if Redis fails, make sure we clear the cookie so the user isn't stuck
         await clearAuthCookie();
-        return erroResponse(error);
+        return errorResponse(error);
     }
 }

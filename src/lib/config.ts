@@ -20,4 +20,10 @@ export const config : IConfig = {
     REDIS_PASSWORD : required("REDIS_PASSWORD"),
     GOOGLE_CLIENT_ID : required("GOOGLE_CLIENT_ID"),
     GOOGLE_CLIENT_SECRET : required("GOOGLE_CLIENT_SECRET"),
+    GROQ_API_KEY : required("GROQ_API_KEY"),
+    GROQ_MODEL : required("GROQ_MODEL"),
+    PINECONE_API_KEY : required("PINECONE_API_KEY"),
+    PINECONE_INDEX_NAME : required("PINECONE_INDEX_NAME"),
+    MISTRAL_API_KEY : required("MISTRAL_API_KEY"),
+    MISTRAL_EMBED_MODEL : required("MISTRAL_EMBED_MODEL"),
 }

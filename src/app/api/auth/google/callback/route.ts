@@ -4,7 +4,7 @@ import { generateToken } from "@/lib/jwt";
 import { setAuthCookie } from "@/lib/cookie";
 import { createUser, findUserByEmail, findUserByGoogleId } from "@/server/dao/auth.dao";
 import { config } from "@/lib/config";
-import erroResponse from "@/server/utils/api-response";
+import errorResponse from "@/server/utils/api-response";
 import crypto from "crypto";
 
 export async function GET(req: NextRequest) {
@@ -83,6 +83,6 @@ export async function GET(req: NextRequest) {
     // 5. Redirect user to dashboard/home page
     return NextResponse.redirect(new URL("/dashboard", req.url));
   } catch (error) {
-    return erroResponse(error);
+    return errorResponse(error);
   }
 }
