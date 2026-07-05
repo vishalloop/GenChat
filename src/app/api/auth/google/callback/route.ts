@@ -66,7 +66,7 @@ export async function GET(req: NextRequest) {
     const token = generateToken({ id: user._id.toString() });
     await setAuthCookie(token);
 
-    return NextResponse.redirect(new URL("/dashboard", req.url));
+    return NextResponse.redirect(new URL("/dashboard", process.env.NEXT_PUBLIC_APP_URL!));
   } catch (error) {
     return errorResponse(error);
   }
