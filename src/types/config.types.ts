@@ -1,4 +1,5 @@
 export interface IConfig {
+    NEXT_PUBLIC_APP_URL: string;
     MONGO_URI : string;
     JWT_SECRET : string;
     NODE_ENV : string;
