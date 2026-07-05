@@ -1,23 +1,26 @@
-// src/lib/redis.ts
 import Redis from "ioredis";
 import { config } from "./config";
 
-const redis = new Redis({
-  host: config.REDIS_HOST,
-  port: Number(config.REDIS_PORT),
-  password: config.REDIS_PASSWORD,
-  tls: config.NODE_ENV === "production" ? {} : undefined,
-  retryStrategy: (times) => {
-    return Math.min(times * 50, 3000);
-  },
-});
+const globalForRedis = globalThis as unknown as { redis: Redis };
+
+export const redis =
+    globalForRedis.redis ??
+    new Redis({
+        host: config.REDIS_HOST,
+        port: Number(config.REDIS_PORT),
+        password: config.REDIS_PASSWORD,
+    });
+
+if (process.env.NODE_ENV !== "production") {
+    globalForRedis.redis = redis;
+}
 
 redis.on("connect", () => {
-  console.log("✅ Redis connected.");
+    console.log("Connected to redis successfully.");
 });
 
 redis.on("error", (err) => {
-  console.error("❌ Redis error:", err.message);
+    console.log("Redis Error:", err);
 });
 
 export default redis;
