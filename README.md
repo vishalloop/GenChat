@@ -9,11 +9,10 @@
 [![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose-green?logo=mongodb)](https://www.mongodb.com)
 [![Redis](https://img.shields.io/badge/Redis-ioredis-red?logo=redis)](https://redis.io)
 [![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-4-38bdf8?logo=tailwind-css)](https://tailwindcss.com)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 
 <br />
 
-**🔗 Live Demo:** `(link goes here after deployment)`
+**🔗 Live Demo:** `https://genchat-era4.onrender.com/`
 
 <br />
 
@@ -55,7 +54,7 @@ What makes GenChat different from a simple chatbot wrapper:
 
 ## 🔗 Live Demo
 
-> **🚀 Live Link:** [https://gen-chat.onrender.com](https://gen-chat.onrender.com)
+> **🚀 Live Link:** https://genchat-era4.onrender.com/
 >
 > _(Replace with your actual Render URL after deploying)_
 
@@ -520,12 +519,6 @@ This means if a user asks "what was my first question?" — even if it was 200 m
 
 ---
 
-## 📄 License
-
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
-
----
-
 <div align="center">
-  Made with ❤️ by <a href="https://github.com/your-username">Your Name</a>
+  Made with ❤️ by <a href="https://github.com/vishalloop">Vshal Raj</a>
 </div>
